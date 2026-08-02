@@ -13,6 +13,7 @@ const submitButton = document.querySelector('#submitButton');
 const formMessage = document.querySelector('#formMessage');
 const reviewsList = document.querySelector('#reviewsList');
 const reviewCount = document.querySelector('#reviewCount');
+const sortReviews = document.querySelector('#sortReviews');
 const toast = document.querySelector('#successToast');
 const ratingText = document.querySelector('#ratingText');
 let star = 5;
@@ -54,14 +55,19 @@ function renderReviews(reviews) {
     return;
   }
   reviewsList.innerHTML = reviews.map((review) => {
-    const name = escapeHtml(review.username?.trim() || '匿名用户');
+    const rawName = review.username?.trim() || '匿名用户';
+    const name = escapeHtml(rawName);
     const text = escapeHtml(review.comment || '');
     const tags = Array.isArray(review.tags) ? review.tags : [];
+    const liked = localStorage.getItem(`amon-liked-${review.id}`) === 'true';
     return `<article class="review-item">
-      <div class="review-head"><span class="review-name">🧐 ${name}</span><span class="review-stars">${starsMarkup(Number(review.star) || 5)}</span></div>
+      <div class="review-head"><span class="review-name">${rawName === '匿名用户' ? '👤' : '🧐'} ${name}</span><span class="review-stars">${starsMarkup(Number(review.star) || 5)}</span></div>
       <p class="review-comment">${text}</p>
       ${tags.length ? `<div class="review-tags">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
-      <p class="source-status ${review.source ? 'yes' : ''}">${review.source ? '🜏 已将源堡作为小费赠与阿蒙' : '❌ 未提供源堡作为小费赠与阿蒙'}</p>
+      <div class="review-bottom">
+        <p class="source-status ${review.source ? 'yes' : ''}">${review.source ? '🜏 已将源堡作为小费赠与阿蒙' : '❌ 未提供源堡作为小费赠与阿蒙'}</p>
+        <button class="like-button ${liked ? 'liked' : ''}" data-review-id="${review.id}" type="button" aria-pressed="${liked}">♥ ${Number(review.likes) || 0}</button>
+      </div>
     </article>`;
   }).join('');
 }
@@ -75,13 +81,34 @@ async function loadReviews() {
     reviewsList.innerHTML = '<div class="empty">请先在 config.js 中填写 Supabase 配置。</div>';
     return;
   }
-  const { data, error } = await supabase.from('reviews').select('username, comment, star, tags, source, created_at').order('created_at', { ascending: false });
+  const orderColumn = sortReviews.value === 'popular' ? 'likes' : 'created_at';
+  const { data, error } = await supabase.from('reviews').select('id, username, comment, star, tags, source, likes, created_at').order(orderColumn, { ascending: false }).order('created_at', { ascending: false });
   if (error) {
     reviewsList.innerHTML = '<div class="empty">评价加载失败，请稍后重试。</div>';
     return;
   }
   renderReviews(data || []);
 }
+
+sortReviews.addEventListener('change', loadReviews);
+
+reviewsList.addEventListener('click', async (event) => {
+  const button = event.target.closest('.like-button');
+  if (!button || button.getAttribute('aria-pressed') === 'true' || !supabase) return;
+  const reviewId = Number(button.dataset.reviewId);
+  if (!Number.isInteger(reviewId)) return;
+  button.disabled = true;
+  const { error } = await supabase.rpc('increment_review_likes', { review_id: reviewId });
+  if (error) {
+    button.disabled = false;
+    formMessage.textContent = '点赞失败，请稍后重试。';
+    return;
+  }
+  localStorage.setItem(`amon-liked-${reviewId}`, 'true');
+  button.classList.add('liked');
+  button.setAttribute('aria-pressed', 'true');
+  button.textContent = `♥ ${Number(button.textContent.replace(/\D/g, '')) + 1}`;
+});
 
 function showToast() {
   toast.classList.add('show');
