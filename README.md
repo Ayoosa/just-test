@@ -1,4 +1,4 @@
-# 阿蒙外卖评价系统
+# 只是漫展用来当成无料二维码做着玩的
 
 纯 HTML、CSS、JavaScript 的 GitHub Pages 项目，评论数据使用 Supabase 保存。
 
