@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#16a56c" />
+    <title>阿蒙外卖评价系统</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="delivery-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>订单已送达</span>
+      </header>
+
+      <section class="card rider-card" aria-label="骑手信息">
+        <div class="avatar" aria-hidden="true">🧐</div>
+        <div class="rider-details">
+          <div class="rider-title">
+            <h1>阿蒙</h1>
+            <span class="service-tag">时之虫专送</span>
+          </div>
+          <p>配送准时率 <strong>100%</strong></p>
+        </div>
+        <span class="more" aria-hidden="true">›</span>
+      </section>
+
+      <section class="card review-card" aria-labelledby="review-title">
+        <p class="eyebrow">本次配送体验如何？</p>
+        <h2 id="review-title">给阿蒙一个评价</h2>
+
+        <div class="rating-area">
+          <div class="stars" id="starRating" role="radiogroup" aria-label="配送评分">
+            <button type="button" class="star selected" data-value="1" role="radio" aria-checked="true" aria-label="1 星">★</button>
+            <button type="button" class="star selected" data-value="2" role="radio" aria-checked="true" aria-label="2 星">★</button>
+            <button type="button" class="star selected" data-value="3" role="radio" aria-checked="true" aria-label="3 星">★</button>
+            <button type="button" class="star selected" data-value="4" role="radio" aria-checked="true" aria-label="4 星">★</button>
+            <button type="button" class="star selected" data-value="5" role="radio" aria-checked="true" aria-label="5 星">★</button>
+          </div>
+          <span id="ratingText">超满意</span>
+        </div>
+
+        <div class="tag-list" id="tagList" aria-label="评价标签">
+          <button type="button" class="review-tag" data-tag="配送快">配送快</button>
+          <button type="button" class="review-tag" data-tag="态度好">态度好</button>
+          <button type="button" class="review-tag" data-tag="准时">准时</button>
+          <button type="button" class="review-tag" data-tag="神秘可靠">神秘可靠</button>
+        </div>
+
+        <form id="reviewForm" novalidate>
+          <label for="username">用户名</label>
+          <input id="username" name="username" maxlength="32" placeholder="请输入你的名字" autocomplete="nickname" required />
+
+          <label for="comment">评价内容</label>
+          <textarea id="comment" name="comment" maxlength="300" placeholder="说说这次配送体验吧…" required></textarea>
+
+          <label class="source-check" for="source">
+            <input id="source" name="source" type="checkbox" checked />
+            <span>我愿意将源堡作为小费赠与阿蒙</span>
+          </label>
+
+          <p class="form-message" id="formMessage" role="alert" aria-live="polite"></p>
+          <button class="submit-button" id="submitButton" type="submit">提交好评</button>
+        </form>
+      </section>
+
+      <section class="reviews-section" aria-labelledby="reviews-title">
+        <div class="section-heading">
+          <h2 id="reviews-title">大家的评价</h2>
+          <span id="reviewCount"></span>
+        </div>
+        <div id="reviewsList" class="reviews-list" aria-live="polite">
+          <div class="loading">正在读取评价…</div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="successToast" role="status" aria-live="polite">
+      <span class="toast-icon">✓</span>
+      <span>评价成功，源堡已收！</span>
+    </div>
+
+    <script src="config.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
