@@ -1,8 +1,10 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 const config = window.SUPABASE_CONFIG || {};
-const isConfigured = config.url && config.anonKey && !config.url.includes('YOUR_');
-const supabase = isConfigured ? createClient(config.url, config.anonKey) : null;
+// Supabase client 会自行附加 /rest/v1。兼容误填 REST endpoint 的情况。
+const projectUrl = String(config.url || '').trim().replace(/\/rest\/v1\/?$/, '');
+const isConfigured = projectUrl && config.anonKey && !projectUrl.includes('YOUR_');
+const supabase = isConfigured ? createClient(projectUrl, String(config.anonKey).trim()) : null;
 const form = document.querySelector('#reviewForm');
 const username = document.querySelector('#username');
 const comment = document.querySelector('#comment');

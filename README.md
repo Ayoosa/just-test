@@ -9,7 +9,7 @@
 ## Supabase 配置
 
 1. 新建一个 Supabase 项目，在 SQL Editor 中执行 [supabase.sql](supabase.sql)。
-2. 在项目 **Settings → API** 找到 `Project URL` 和 `anon public key`。
+2. 在项目 **Settings → API** 找到 `Project URL` 和 `anon public key`。`Project URL` 必须是 `https://项目标识.supabase.co`，不要填写带有 `/rest/v1` 的 REST endpoint。
 3. 将两项填入 `config.js`。只能使用 anon public key，绝不能使用 `service_role` key。
 4. 可在 Table Editor 的 `reviews` 表中确认提交的数据。
 

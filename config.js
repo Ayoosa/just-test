@@ -1,4 +1,5 @@
-// 将 Supabase 项目设置中的 URL 和 anon public key 填到这里。
+// 将 Supabase 项目设置中的 Project URL 和 anon/publishable key 填到这里。
+// URL 必须形如 https://项目标识.supabase.co，不能包含 /rest/v1。
 // anon key 可公开放在 GitHub Pages；不要填写 service_role key。
 window.SUPABASE_CONFIG = {
   url: 'https://dorquqwhgmglshylznug.supabase.co',
