@@ -13,7 +13,7 @@
 3. 将两项填入 `config.js`。只能使用 anon public key，绝不能使用 `service_role` key。
 4. 可在 Table Editor 的 `reviews` 表中确认提交的数据。
 
-如果更新了项目功能，请再次执行 `supabase.sql`，它会安全地补充点赞字段和点赞函数。
+如果更新了项目功能，请再次执行 `supabase.sql`，它会安全地补充点赞字段、评论表和所需函数。
 
 ## GitHub Pages 部署
 
